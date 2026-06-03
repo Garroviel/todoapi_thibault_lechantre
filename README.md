@@ -43,6 +43,13 @@ GET /health
   "updatedAt": "timestamp"
 }
 
+## Configuration
+
+Copier le fichier .env.example :
+
+cp .env.example .env
+
+Puis adapter les valeurs si nécessaire.
 
 ## Lancement du projet ##
 
