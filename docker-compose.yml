@@ -1,0 +1,10 @@
+services:
+  todo-api:
+    build: .
+    container_name: todo-api
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./src/data:/app/src/data
+    environment:
+      - PORT=3000

@@ -1,10 +1,7 @@
-const app = require("express")();
-
-app.get("/", (req, res) => res.json({ message: "Bonjouuuur :)" }));
+const app = require("./app");
 
 const port = process.env.PORT || 3000;
 
-
-app.listen(port, () =>
-  console.log(`app listening on http://localhost:${port}`)
-);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`API running inside container on port ${port}`);
+});
