@@ -30,3 +30,16 @@ ce qui est l'image complète
 correction :
 
 FROM node:18-alpine
+
+## Docker-compose-broken
+
+DB_HOST est faux :
+DB_HOST: postgres
+
+il faut :
+
+DB_HOST: database
+
+la syntaxe du volume doit être :
+	volumes:
+  		db-data:
