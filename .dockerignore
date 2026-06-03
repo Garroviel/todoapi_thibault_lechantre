@@ -1,1 +1,12 @@
-node_modules/
+node_modules
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+docker-debug
+.env
+.env.example
+npm-debug.log
+coverage
+logs
+preuves-persistance
