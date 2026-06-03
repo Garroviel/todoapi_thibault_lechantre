@@ -1,10 +1,41 @@
 services:
-  todo-api:
+  api:
     build: .
     container_name: todo-api
     ports:
       - "3001:3000"
     volumes:
-      - ./src/data:/app/src/data
+      - ./src:/app/src
+      - api-logs:/app/logs
     environment:
+      - NODE_ENV=development
       - PORT=3000
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=todo_db
+      - DB_USER=todo_user
+      - DB_PASSWORD=todo_pass
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:15-alpine
+    container_name: todo-db
+    environment:
+      - POSTGRES_DB=todo_db
+      - POSTGRES_USER=todo_user
+      - POSTGRES_PASSWORD=todo_pass
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U todo_user -d todo_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+  api-logs:
