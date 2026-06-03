@@ -14,6 +14,19 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date() });
 });
 
+app.get("/config", (req, res) => {
+  const port = process.env.PORT || 3000;
+  const apiKey = process.env.API_KEY;
+  const environment = process.env.NODE_ENV || "development";
+
+  res.json({
+    port,
+    hasApiKey: !!apiKey,
+    environment,
+    message: `Running in ${environment} mode`,
+  });
+});
+
 app.use("/api/tasks", taskRoutes);
 
 app.use(errorHandler);
