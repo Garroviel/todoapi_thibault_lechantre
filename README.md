@@ -116,3 +116,10 @@ GET    /api/tasks
 GET    /api/tasks/:id
 PUT    /api/tasks/:id
 DELETE /api/tasks/:id
+
+
+## Exercice debugger dockerfile ##
+
+dans Docs/Docker-debug.md les soluces
+
+dans docker-debug/ les dockerfile
