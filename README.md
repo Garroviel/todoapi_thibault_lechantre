@@ -123,3 +123,10 @@ DELETE /api/tasks/:id
 dans Docs/Docker-debug.md les soluces
 
 dans docker-debug/ les dockerfile
+
+## Tests
+
+### Tests unitaires
+
+```bash
+npm run test:unit

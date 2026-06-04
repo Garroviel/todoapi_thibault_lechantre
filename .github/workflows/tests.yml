@@ -1,0 +1,72 @@
+name: Todo API Tests
+
+"on":
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  test-unit:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+  test-integration:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: todo_test
+          POSTGRES_USER: todo_user
+          POSTGRES_PASSWORD: todo_pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U todo_user -d todo_test"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      NODE_ENV: test
+      PORT: 3000
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_NAME: todo_test
+      DB_USER: todo_user
+      DB_PASSWORD: todo_pass
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run integration tests
+        run: npm run test:integration
