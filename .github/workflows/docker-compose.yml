@@ -1,0 +1,45 @@
+name: Docker Compose CI
+
+"on":
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  compose:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          cat > .env << EOF
+          NODE_ENV=development
+          PORT=3000
+          API_KEY=ci-secret
+          DB_HOST=db
+          DB_PORT=5432
+          DB_NAME=todo_db
+          DB_USER=todo_user
+          DB_PASSWORD=todo_pass
+          POSTGRES_DB=todo_db
+          POSTGRES_USER=todo_user
+          POSTGRES_PASSWORD=todo_pass
+          EOF
+
+      - name: Start services
+        run: docker compose up -d --build
+
+      - name: Test health endpoint
+        run: |
+          sleep 10
+          curl --fail http://localhost:3001/health
+
+      - name: Test config endpoint
+        run: curl --fail http://localhost:3001/config
+
+      - name: Stop services
+        if: always()
+        run: docker compose down
